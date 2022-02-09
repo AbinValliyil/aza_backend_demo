@@ -1,7 +1,7 @@
 from  fastapi  import FastAPI,Depends
 from DB.database import Base, engine
 from Model import models
-from Routers import Users
+from Routers import Users,Zipcode
 from fastapi.middleware.cors import CORSMiddleware
 from  Security.jwt_bearer import JWTBearer
 
@@ -16,6 +16,7 @@ app=FastAPI( title="AZA [Shiping Service]" ,
              
                           })
 app.include_router(Users.router)
+app.include_router(Zipcode.router)
 
 origins = [
     "http://localhost:3000",

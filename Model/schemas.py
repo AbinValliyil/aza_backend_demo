@@ -42,3 +42,11 @@ class AZAUser_login_res(BaseModel):
 
 class Token(BaseModel):
     token :str
+
+
+
+
+class AZA_geocode(BaseModel):
+    pin1:str
+    pin2:str
+    
