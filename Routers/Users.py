@@ -1,3 +1,4 @@
+from operator import iadd
 from fastapi import APIRouter, Depends,status,HTTPException
 import sqlalchemy
 from Model.models import AZAUser
@@ -6,8 +7,10 @@ from Security.jwt_handler import signJWT
 from Security.utils import verify,hash
 from DB.database import Base, engine,get_db ,SessionLocal
 from sqlalchemy.orm import session
-from Security.jwt_bearer import JWTBearer
 from fastapi import Request, HTTPException
+
+
+
 
 router=APIRouter()
 db = SessionLocal()
@@ -88,4 +91,6 @@ def user_login(user_credentials:schemas.AZAUser_login,db:session=Depends(get_db)
             },
      'status':status.HTTP_302_FOUND
     }
+
+
 
