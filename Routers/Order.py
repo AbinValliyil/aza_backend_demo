@@ -13,7 +13,7 @@ db = SessionLocal()
 
 
 @router.post('/Create_Order',dependencies=[Depends(JWTBearer())],tags=['Order For Shipind'])
-def create_user_item( package: schemas.Package_Create,Pickup_address:schemas.Pickup_Address_Create,Delivery_address:schemas.Delivery_Address_Create,Delivery_details:schemas.Delivery_Details_Create, user_id: int,db: session = Depends(get_db)):
+def create_user_Order( package: schemas.Package_Create,Pickup_address:schemas.Pickup_Address_Create,Delivery_address:schemas.Delivery_Address_Create,Delivery_details:schemas.Delivery_Details_Create, user_id:str,db: session = Depends(get_db)):
     db_Package = models.Package(**package.dict(), owner_id=user_id)
     db.add(db_Package)
     db.commit()
@@ -35,7 +35,7 @@ def create_user_item( package: schemas.Package_Create,Pickup_address:schemas.Pic
 
 
 @router.get('/Get_Order{user_id}',dependencies=[Depends(JWTBearer())],tags=['Get_All_Order'])
-def get_an_order(user_id:int):
+def get_an_order(user_id:str):
 
     package1 = db.query(models.Package).filter(models.Package.owner_id == user_id).all()
     package2 = db.query(models.Pickup_Address).filter(models.Pickup_Address.owner_id == user_id).all()
