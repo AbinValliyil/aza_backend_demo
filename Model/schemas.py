@@ -2,6 +2,21 @@ from pydantic import BaseModel
 from datetime  import datetime
 from fastapi import Body
 from typing import List,Optional
+from Routers import Users
+
+
+
+#otp validation
+class OTP(BaseModel):
+    pass
+class AZAOpt(OTP):
+     
+    mobile_number  :str
+
+    otp            :str
+
+
+
 
 #signup model
 
@@ -133,4 +148,37 @@ class Delivery_Details_id(Delivery_Details):
     owner_id   : int
 
     class Config:
+        orm_mode = True
+
+
+
+
+class Serviceman_status(BaseModel):
+    id                : int
+    delivery_status   : str
+    delivered_date    : str
+    pickup_date       : str
+    delivery_type     : str
+    order_id          : str
+
+
+class Status(Serviceman_status):
+    pass
+
+class status(Serviceman_status):
+    id :int
+    owner_id:int
+
+    class config:
+        orm_mode = True
+
+
+
+class Resetpass(BaseModel):
+
+    mobile_number:str
+    password     :str
+
+
+    class config:
         orm_mode = True

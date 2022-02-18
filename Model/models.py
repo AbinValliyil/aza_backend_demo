@@ -7,6 +7,24 @@ from sqlalchemy.sql.functions import current_timestamp
 from typing import Text
 from sqlalchemy.orm import  relationship
 
+class AZAOTP(Base):
+    __tablename__='otp'
+    id                = Column(Integer,primary_key=True,autoincrement=True)
+    mobile_number     = Column(String,nullable=False)
+    otp               = Column(String,nullable=False)
+    created_at        = Column(DateTime, default=current_timestamp())
+    updated_at        = Column(DateTime, onupdate=current_timestamp())
+
+
+
+# class AZAOTPvalidation(Base):
+#     __tablename__='otp_vaidation'
+#     id                = Column(Integer,primary_key=True,autoincrement=True)
+#     mobile_number     = Column(String,nullable=False)
+#     otp               = Column(String,nullable=False)
+#     created_at        = Column(DateTime, default=current_timestamp())
+#     updated_at        = Column(DateTime, onupdate=current_timestamp())
+
 
 
 class AZAUser(Base):
@@ -79,4 +97,47 @@ class Delivery_Details(Base):
     pickup_date       = Column(String,nullable=True)
     owner_id          = Column(Integer, ForeignKey("users.id"))
     owner             = relationship("AZAUser", back_populates="delivery_details")
+
+
+
+
+# class AZAserviceman(Base):
+#     __tablename__='serviceman'
+#     id                = Column(Integer,primary_key=True,autoincrement=True)
+#     name              = Column(String,nullable=False)
+#     mobile_number     = Column(String,nullable=False,unique=True)
+#     password          = Column(String,nullable=False)
+#     created_at        = Column(DateTime, default=current_timestamp())
+#     updated_at        = Column(DateTime, onupdate=current_timestamp())
+#     dld  = relationship("S_delivery", back_populates="owner")
+#    # pkd    = relationship(" S_pickup", back_populates="owner")
+  
+
+
+# class S_delivery(Base):
+#     __tablename__ ='sdelivery_details'
+
+#     id                = Column(Integer,primary_key=True)
+#     delivery_status   = Column(String,nullable=True)
+#     delivered_date    = Column(String,nullable=True)
+#     pickup_date       = Column(String,nullable=True)
+#     delivery_type     = Column(String,nullable=True)
+#     order_id          = Column(Integer,nullable=True)
+#     owner_id          = Column(Integer, ForeignKey("serviceman.id"))
+#     owner             = relationship("AZAserviceman", back_populates="dld")
+
+
+
+
+# class S_pickup(Base):
+#     __tablename__ ='spickup_details'
+
+#     id                = Column(Integer,primary_key=True)
+#     pickup_status     = Column(String,nullable=True)
+#     pickup_date       = Column(String,nullable=True)
+#     pickup_type       = Column(String,nullable=True)
+#     order_id          = Column(String,nullable=True)
+#     payment_status    = Column(Boolean,nullable=True)
+#     owner_id          = Column(Integer, ForeignKey("serviceman.id"))
+#     owner             = relationship("AZAserviceman", back_populates="pkd")
 

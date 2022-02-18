@@ -1,4 +1,5 @@
 from typing import Dict
+
 from decouple import config
 import time,jwt
 
@@ -26,7 +27,7 @@ def signJWT(mobile_number: str)-> Dict[str, str]:
 
 
 
-def decodeJWT(token: str):
+def decodeJWT(token:str):
     try:
         decode_token = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         return decode_token if decode_token["expires"] >= time.time() else None

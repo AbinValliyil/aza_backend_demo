@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 
-@router.post('/distance_finder',tags=['Zipcode_Validation'])
+@router.post('/distance_finder',tags=['ZIPCODE_VALIDATION'])
 def d_finder(code:schemas.AZA_geocode):
   geocoder =Nominatim(user_agent='python')
   location1=code.pin1

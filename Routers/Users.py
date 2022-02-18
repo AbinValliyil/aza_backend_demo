@@ -1,21 +1,22 @@
 from operator import iadd
+from token import EQUAL
 from fastapi import APIRouter, Depends,status,HTTPException
-import sqlalchemy
 from Model.models import AZAUser
 from Model import schemas,models
 from Security.jwt_handler import signJWT
 from Security.utils import verify,hash
+from Security.Random_OTP import OTPgenerator
 from DB.database import Base, engine,get_db ,SessionLocal
 from sqlalchemy.orm import session
 from fastapi import Request, HTTPException
-
-
+import requests
 
 
 router=APIRouter()
 db = SessionLocal()
 
-@router.post('/create_user',tags=['Register'])
+
+@router.post('/create_user',tags=['SIGN_UP'])
 
 async def create_an_user(user:schemas.AZA_SingUp,db:session=Depends(get_db)):
       
@@ -55,7 +56,7 @@ async def create_an_user(user:schemas.AZA_SingUp,db:session=Depends(get_db)):
             'status':status.HTTP_201_CREATED
             }    
     
-@router.post('/login',tags=['Authentication'])
+@router.post('/login',tags=['SING_IN'])
 def user_login(user_credentials:schemas.AZAUser_login,db:session=Depends(get_db)):
 
     user = db.query(models.AZAUser).filter(models.AZAUser.mobile_number==user_credentials.mobile_number).first()
@@ -93,4 +94,42 @@ def user_login(user_credentials:schemas.AZAUser_login,db:session=Depends(get_db)
     }
 
 
+
+
+@router.put('/Reset_password',tags=["User Reset password "])
+async def reset(user:schemas.Resetpass,db:session=Depends(get_db)):
+    
+    users = db.query(models.AZAUser).filter(models.AZAUser.mobile_number==user.mobile_number).first()
+    
+    if not users:
+
+    
+     return{"error_message": "There was a problem with your password reset","status":status.HTTP_404_NOT_FOUND}
+    
+    hashed_password = hash(user.password)
+    users.password  = hashed_password
+    
+    token = signJWT( user.mobile_number )
+    
+    fname = db.query(models.AZAUser.name).filter(models.AZAUser.mobile_number==user.mobile_number).first()
+    fl_id =db.query(models.AZAUser.id).filter(models.AZAUser.mobile_number==user.mobile_number).first()
+    
+
+    db.add(users)
+    db.commit()
+    db.refresh(users)
+
+    
+    
+    return  {'user_data':{
+
+                **fl_id,
+                **fname,
+                'mobile_number': int(user.mobile_number) ,
+                "access_token" :token,  
+                "token_type":"Bearer"
+            },
+     'status':status.HTTP_302_FOUND }
+    
+  
 
