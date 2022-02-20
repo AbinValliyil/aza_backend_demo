@@ -16,7 +16,7 @@ router=APIRouter()
 db = SessionLocal()
 
 
-@router.post('/create_user',tags=['SIGN_UP'])
+@router.post('/create_user',tags=['User'])
 
 async def create_an_user(user:schemas.AZA_SingUp,db:session=Depends(get_db)):
       
@@ -56,7 +56,7 @@ async def create_an_user(user:schemas.AZA_SingUp,db:session=Depends(get_db)):
             'status':status.HTTP_201_CREATED
             }    
     
-@router.post('/login',tags=['SING_IN'])
+@router.post('/login',tags=['User'])
 def user_login(user_credentials:schemas.AZAUser_login,db:session=Depends(get_db)):
 
     user = db.query(models.AZAUser).filter(models.AZAUser.mobile_number==user_credentials.mobile_number).first()
@@ -96,7 +96,7 @@ def user_login(user_credentials:schemas.AZAUser_login,db:session=Depends(get_db)
 
 
 
-@router.put('/Reset_password',tags=["User Reset password "])
+@router.put('/Reset_password',tags=["User"])
 async def reset(user:schemas.Resetpass,db:session=Depends(get_db)):
     
     users = db.query(models.AZAUser).filter(models.AZAUser.mobile_number==user.mobile_number).first()

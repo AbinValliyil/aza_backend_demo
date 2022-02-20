@@ -13,18 +13,20 @@ router=APIRouter()
 @router.post('/OTP_Genarator',tags=['MOBILE_OTP'])
 async def otp(mobile_num:str,Opt:schemas.OTP,db:session=Depends(get_db)):
 
-    URL =config('OTP_URL')
+    url ="https://www.fast2sms.com/dev/bulkV2"
     otp = OTPgenerator()
     mobile_number =mobile_num
     payload = f"variables_values={otp} , Team AZA Shiping Services! &route=otp&numbers={mobile_number}"
     headers = {
-    'authorization': config('OTP_AUTH'),
+    'authorization':"1IJ6RkwgEFBm4i5YZdPD2SQj3GKrNebCh8xyOMTXopuv0HsUqlFfAkThdebIwMBYx7OE9tri2DlsRU1v",
     'Content-Type': "application/x-www-form-urlencoded",
     'Cache-Control': "no-cache",
     }  
     
-    response = requests.request("POST", URL, data=payload, headers=headers)
-    
+    response = requests.request("POST", url, data=payload, headers=headers)
+    if not response:
+        return{"status":status.HTTP_503_SERVICE_UNAVAILABLE}
+
     new_otp =models.AZAOTP(**Opt.dict(),mobile_number=mobile_num,otp=otp)
     db.add(new_otp)
     db.commit()
