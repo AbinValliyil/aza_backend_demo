@@ -32,7 +32,7 @@ async def otp(mobile_num:str,db:session=Depends(get_db)):
     db.commit()
     db.refresh(new_otp)
 
-    return {"status":status.HTTP_202_ACCEPTED} 
+    return {"status":status.HTTP_202_ACCEPTED,"mob":mobile_number} 
     
 
 
