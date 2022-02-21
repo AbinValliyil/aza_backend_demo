@@ -11,8 +11,8 @@ router=APIRouter()
 
 
 @router.post('/OTP_Genarator',tags=['MOBILE_OTP'])
-async def otp(mobile_num:str,Opt:schemas.OTP,db:session=Depends(get_db)):
-
+async def otp(mobile_num:str,db:session=Depends(get_db)):
+  
     url ="https://www.fast2sms.com/dev/bulkV2"
     otp = OTPgenerator()
     mobile_number =mobile_num
@@ -26,8 +26,8 @@ async def otp(mobile_num:str,Opt:schemas.OTP,db:session=Depends(get_db)):
     response = requests.request("POST", url, data=payload, headers=headers)
     if not response:
         return{"status":status.HTTP_503_SERVICE_UNAVAILABLE}
-
-    new_otp =models.AZAOTP(**Opt.dict(),mobile_number=mobile_num,otp=otp)
+   
+    new_otp =models.AZAOTP(mobile_number=mobile_num,otp=otp)
     db.add(new_otp)
     db.commit()
     db.refresh(new_otp)
@@ -37,7 +37,7 @@ async def otp(mobile_num:str,Opt:schemas.OTP,db:session=Depends(get_db)):
 
 
 @router.post('/otp_verification',tags=['MOBILE_OTP'])
-def otp_verification(mobile:str,otp:str,Opt:schemas.OTP,db:session=Depends(get_db)):
+def otp_verification(mobile:str,otp:str,db:session=Depends(get_db)):
      
     
     valid_otps = db.query(models.AZAOTP.otp).filter(models.AZAOTP.mobile_number==mobile).all()

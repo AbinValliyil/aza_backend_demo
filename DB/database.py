@@ -8,7 +8,7 @@ from decouple import config
 
 #local database
 
-engine=create_engine('postgresql://postgres:123@localhost/AZA',echo=True) 
+#engine=create_engine('postgresql://postgres:123@localhost/AZA',echo=True) 
 
 #heroku database
 
@@ -16,7 +16,7 @@ engine=create_engine('postgresql://postgres:123@localhost/AZA',echo=True)
 DB_URL = 'DB'
 
 
-#engine =create_engine( config( DB_URL))
+engine =create_engine( config( DB_URL))
 
 
 print("Database ****** connected")

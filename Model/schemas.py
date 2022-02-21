@@ -6,14 +6,6 @@ from Routers import Users
 
 
 
-#otp validation
-class OTP(BaseModel):
-    pass
-class AZAOpt(OTP):
-     
-    mobile_number  :str
-
-    otp            :str
 
 
 
