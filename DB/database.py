@@ -8,7 +8,7 @@ from decouple import config
 
 #local database
 
-#engine=create_engine('postgresql://postgres:123@localhost/AZA',echo=True) 
+# engine=create_engine('postgresql://postgres:123@localhost/AZA',echo=True) 
 
 #heroku database
 
