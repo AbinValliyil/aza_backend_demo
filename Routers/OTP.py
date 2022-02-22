@@ -17,7 +17,7 @@ async def otp(mobile_num:str,db:session=Depends(get_db)):
     if db_user is not  None:
         # raise HTTPException(status_code=400,error_message="mobile number already exists!")
         #return JSONResponse(status_code=400,content="mobile number already exists!")
-        return{"error_message": "mobile number already exists! please go back the login","status":status.HTTP_400_BAD_REQUEST}
+        return{"error_message": "mobile number already exists! please login","status":status.HTTP_400_BAD_REQUEST}
            
     url ="https://www.fast2sms.com/dev/bulkV2"
     otp = OTPgenerator()
@@ -77,7 +77,7 @@ def otp_verification(mobile:str,otp:str,db:session=Depends(get_db)):
         valid_otp =list(valid_otps).pop()
         if valid_otp[0] == otp:
             return {"message":"OTP Verification Successfull","status":status.HTTP_202_ACCEPTED}
-    
+             
     return {"message":"Invalid OTP","status":status.HTTP_404_NOT_FOUND}
     
 
