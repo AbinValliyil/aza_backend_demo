@@ -10,7 +10,7 @@ router=APIRouter()
 
 
     
-@router.post('/OTP_Genarator for singup',tags=['MOBILE_OTP'])
+@router.post('/OTP_Genarator/singup',tags=['MOBILE_OTP'])
 async def otp(mobile_num:str,db:session=Depends(get_db)):
     db_user= db.query(models.AZAUser).filter(models.AZAUser.mobile_number ==mobile_num).first()
 
@@ -42,7 +42,7 @@ async def otp(mobile_num:str,db:session=Depends(get_db)):
 
   
 
-@router.post('/OTP_Genarator for reset password',tags=['MOBILE_OTP'])
+@router.post('/OTP_Genarator/resetpassword',tags=['MOBILE_OTP'])
 async def otp(mobile_num:str,db:session=Depends(get_db)):
     url ="https://www.fast2sms.com/dev/bulkV2"
     otp = OTPgenerator()
