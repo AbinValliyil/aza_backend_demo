@@ -11,18 +11,33 @@ router = APIRouter()
 
 
 
+# @router.post('/distance_finder',tags=['ZIPCODE_VALIDATION'])
+# async def d_finder(code:schemas.AZA_geocode):
+#   geocoder =Nominatim(user_agent='python')
+#   cor1 =geocoder.geocode(code.pin1)
+#   cor2 =geocoder.geocode(code.pin2)
+#   lat1,log1 =(cor1.latitude),(cor1.longitude)
+#   lat2,log2 =(cor2.latitude),(cor2.longitude)
+#   place1=(lat1,log1)
+#   place2=(lat2,log2)
+  
+  
+    
+#   return {"distance":distance.distance(place1,place2)._Distance__kilometers}
+
+
+
 @router.post('/distance_finder',tags=['ZIPCODE_VALIDATION'])
-def d_finder(code:schemas.AZA_geocode):
-  geocoder =Nominatim(user_agent='python')
-  location1=code.pin1
-  location2=code.pin2
-  cor1 =geocoder.geocode(location1)
-  cor2 =geocoder.geocode(location2)
+async def d_finder(pin1:str,pin2:str):
+  geocoder =Nominatim(user_agent = "0")
+  cor1 =geocoder.geocode(pin1)
+  cor2 =geocoder.geocode(pin2)
   lat1,log1 =(cor1.latitude),(cor1.longitude)
   lat2,log2 =(cor2.latitude),(cor2.longitude)
   place1=(lat1,log1)
   place2=(lat2,log2)
-  
+  dis =int(distance.distance(place1,place2)._Distance__kilometers)
+  dis1 =distance.distance(place1,place2)._country_
   
     
-  return {"distance":distance.distance(place1,place2)._Distance__kilometers}
+  return {"distance":dis,'d':dis1}

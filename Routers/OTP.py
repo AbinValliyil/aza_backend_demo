@@ -6,6 +6,7 @@ from sqlalchemy.orm import session
 from DB.database import get_db
 from decouple import config
 
+
 router=APIRouter()
 
 
@@ -67,16 +68,20 @@ async def otp(mobile_num:str,db:session=Depends(get_db)):
     
 
 @router.post('/otp_verification',tags=['MOBILE_OTP'])
-def otp_verification(mobile:str,otp:str,db:session=Depends(get_db)):
+def otp_verification(mobile:str,otp:str,d:int,db:session=Depends(get_db)):
      
     
     valid_otps = db.query(models.AZAOTP.otp).filter(models.AZAOTP.mobile_number==mobile).all()
+    
+    
     
 
     if valid_otps:
         valid_otp =list(valid_otps).pop()
         if valid_otp[0] == otp:
+
             return {"message":"OTP Verification Successfull","status":status.HTTP_202_ACCEPTED}
+
              
     return {"message":"Invalid OTP","status":status.HTTP_404_NOT_FOUND}
     

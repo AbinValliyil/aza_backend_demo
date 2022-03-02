@@ -1,6 +1,5 @@
-from operator import iadd
-from token import EQUAL
-from fastapi import APIRouter, Depends,status,HTTPException
+from sqlalchemy import null
+from fastapi import APIRouter, Depends,status,HTTPException,Response
 from Model.models import AZAUser
 from Model import schemas,models
 from Security.jwt_handler import signJWT
@@ -9,7 +8,9 @@ from Security.Random_OTP import OTPgenerator
 from DB.database import Base, engine,get_db ,SessionLocal
 from sqlalchemy.orm import session
 from fastapi import Request, HTTPException
+from fastapi.responses import JSONResponse
 import requests
+from Security.jwt_bearer import JWTBearer
 
 
 router=APIRouter()
@@ -40,21 +41,25 @@ async def create_an_user(user:schemas.AZA_SingUp,db:session=Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     f_id = db.query(models.AZAUser.id).filter(models.AZAUser.mobile_number==user.mobile_number).first()
-    
-    return {'user_data':{
+    content = {"status":200,**f_id, 'name' : user.name,'mobile_number':user.mobile_number }
+    response = JSONResponse(content=content)
+    response.set_cookie(key="Bearer",value=token,expires=60,httponly=True)
+    return response
+
+    # return {'user_data':{
 
                   
               
-             ** f_id,
-             'name'           : user.name,
-             'mobile_number'  :user.mobile_number,
-             'access_token'   :token,
-             'type':"Bearer"
+    #          ** f_id,
+    #          'name'           : user.name,
+    #          'mobile_number'  :user.mobile_number,
+    #          'access_token'   :token,
+    #          'type':"Bearer"
                         
                         
-            },
-            'status':status.HTTP_201_CREATED
-            }    
+    #         },
+    #         'status':status.HTTP_201_CREATED
+    #         }    
     
 @router.post('/login',tags=['USER'])
 def user_login(user_credentials:schemas.AZAUser_login,db:session=Depends(get_db)):
@@ -78,20 +83,26 @@ def user_login(user_credentials:schemas.AZAUser_login,db:session=Depends(get_db)
 
     token = signJWT( user_credentials.mobile_number )
     
+    
     fname = db.query(models.AZAUser.name).filter(models.AZAUser.mobile_number==user_credentials.mobile_number).first()
     fl_id =db.query(models.AZAUser.id).filter(models.AZAUser.mobile_number==user_credentials.mobile_number).first()
     
+    content = {"status":200,**fl_id,**fname, 'mobile_number': int(user_credentials.mobile_number)}
+    response = JSONResponse(content=content)
+    response.set_cookie(key="Bearer",value=token,expires=2.592e+6,httponly=True)
+    return response
 
-    return  {'user_data':{
 
-                **fl_id,
-                **fname,
-                'mobile_number': int(user_credentials.mobile_number) ,
-                "access_token" :token,  
-                "token_type":"Bearer"
-            },
-     'status':status.HTTP_302_FOUND
-    }
+    # return  {'user_data':{
+
+    #             **fl_id,
+    #             **fname,
+    #             'mobile_number': int(user_credentials.mobile_number) ,
+    #             "access_token" :token,  
+    #             "token_type":"Bearer"
+    #         },
+    #  'status':status.HTTP_302_FOUND
+    # }
 
 
 
@@ -131,5 +142,23 @@ async def reset(user:schemas.Resetpass,db:session=Depends(get_db)):
             },
      'status':status.HTTP_302_FOUND }
     
-  
+
+
+# @router.post("/cookie/",tags=['SET-COOKIE'])
+# def create_cookie(mobile_number:str):
+#     token1 = signJWT( mobile_number )
+#     content = {"message": "Come to the dark , we have cookies"}
+#     response = JSONResponse(content=content)
+#     response.set_cookie(key="Bearer",value=token1,expires=60,httponly=True)
+#     return response
+
+
+@router.post("/logout/",tags=['LOGOUT'])
+def create_cookie():
+    
+    content = {"message": "Clear cookies",
+                "status":200}
+    response = JSONResponse(content=content)
+    response.set_cookie(key="Bearer",expires=0,httponly=False)
+    return response
 
