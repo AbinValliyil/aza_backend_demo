@@ -41,25 +41,25 @@ async def create_an_user(user:schemas.AZA_SingUp,db:session=Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     f_id = db.query(models.AZAUser.id).filter(models.AZAUser.mobile_number==user.mobile_number).first()
-    content = {"status":200,**f_id, 'name' : user.name,'mobile_number':user.mobile_number }
-    response = JSONResponse(content=content)
-    response.set_cookie(key="Bearer",value=token,expires=2.592e+6,httponly=True,path ='/',samesite=None)
-    return response
+    # content = {"status":200,**f_id, 'name' : user.name,'mobile_number':user.mobile_number }
+    # response = JSONResponse(content=content)
+    # response.set_cookie(key="Bearer",value=token,expires=2.592e+6,httponly=True,path ='/',samesite=None)
+    # return response
 
-    # return {'user_data':{
+    return {'user_data':{
 
                   
               
-    #          ** f_id,
-    #          'name'           : user.name,
-    #          'mobile_number'  :user.mobile_number,
-    #          'access_token'   :token,
-    #          'type':"Bearer"
+             ** f_id,
+             'name'           : user.name,
+             'mobile_number'  :user.mobile_number,
+             'access_token'   :token,
+             'type':"Bearer"
                         
                         
-    #         },
-    #         'status':status.HTTP_201_CREATED
-    #         }    
+            },
+            'status':status.HTTP_201_CREATED
+            }    
     
 @router.post('/login',tags=['USER'])
 def user_login(user_credentials:schemas.AZAUser_login,db:session=Depends(get_db)):
