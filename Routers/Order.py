@@ -1,3 +1,4 @@
+from typing_extensions import Self
 from fastapi import APIRouter,Depends
 from Model import schemas,models
 from Security.jwt_bearer import JWTBearer
@@ -29,8 +30,7 @@ def create_user_Order( package: schemas.Package_Create,Pickup_address:schemas.Pi
     db.commit()
     db.refresh(db_Delivery_details)
     return  str(uuid4())+'->'+str(user_id) + ','+"AZA"
-
-
+   
 
 
 @router.get('/get_userorder',dependencies=[Depends(JWTBearer())],tags=['USER_ORDER'])

@@ -37,7 +37,5 @@ async def d_finder(pin1:str,pin2:str):
   place1=(lat1,log1)
   place2=(lat2,log2)
   dis =int(distance.distance(place1,place2)._Distance__kilometers)
-  dis1 =distance.distance(place1,place2)._country_
   
-    
-  return {"distance":dis,'d':dis1}
+  return {"distance":dis}

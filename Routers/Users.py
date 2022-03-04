@@ -43,7 +43,7 @@ async def create_an_user(user:schemas.AZA_SingUp,db:session=Depends(get_db)):
     f_id = db.query(models.AZAUser.id).filter(models.AZAUser.mobile_number==user.mobile_number).first()
     content = {"status":200,**f_id, 'name' : user.name,'mobile_number':user.mobile_number }
     response = JSONResponse(content=content)
-    response.set_cookie(key="Bearer",value=token,expires=60,httponly=True)
+    response.set_cookie(key="Bearer",value=token,expires=2.592e+6,httponly=True,path ='/',samesite=None)
     return response
 
     # return {'user_data':{
@@ -87,22 +87,25 @@ def user_login(user_credentials:schemas.AZAUser_login,db:session=Depends(get_db)
     fname = db.query(models.AZAUser.name).filter(models.AZAUser.mobile_number==user_credentials.mobile_number).first()
     fl_id =db.query(models.AZAUser.id).filter(models.AZAUser.mobile_number==user_credentials.mobile_number).first()
     
-    content = {"status":200,**fl_id,**fname, 'mobile_number': int(user_credentials.mobile_number)}
-    response = JSONResponse(content=content)
-    response.set_cookie(key="Bearer",value=token,expires=2.592e+6,httponly=True)
-    return response
+    # content = {"status":200,**fl_id,**fname,'token':itoken, 'mobile_number': int(user_credentials.mobile_number)}
+    # response = JSONResponse(content=content)
+    # response.set_cookie(key="Bearer",value=token,expires=2.592e+6,path ='/',samesite=None,domain='azza.vercel.app')
+    # return response
+    
+    # # response.set_cookie(key="access_token",value=f"Bearer {token}", httponly=True)  #set HttpOnly cookie in response
+    # # return response
 
 
-    # return  {'user_data':{
+    return  {'user_data':{
 
-    #             **fl_id,
-    #             **fname,
-    #             'mobile_number': int(user_credentials.mobile_number) ,
-    #             "access_token" :token,  
-    #             "token_type":"Bearer"
-    #         },
-    #  'status':status.HTTP_302_FOUND
-    # }
+                **fl_id,
+                **fname,
+                'mobile_number': int(user_credentials.mobile_number) ,
+                "access_token" :token,  
+                "token_type":"Bearer"
+            },
+     'status':status.HTTP_302_FOUND
+    }
 
 
 
@@ -144,21 +147,22 @@ async def reset(user:schemas.Resetpass,db:session=Depends(get_db)):
     
 
 
-# @router.post("/cookie/",tags=['SET-COOKIE'])
-# def create_cookie(mobile_number:str):
-#     token1 = signJWT( mobile_number )
-#     content = {"message": "Come to the dark , we have cookies"}
-#     response = JSONResponse(content=content)
-#     response.set_cookie(key="Bearer",value=token1,expires=60,httponly=True)
-#     return response
-
-
-@router.post("/logout/",tags=['LOGOUT'])
-def create_cookie():
-    
-    content = {"message": "Clear cookies",
-                "status":200}
+@router.post("/cookie/",tags=['SET-COOKIE'])
+def create_cookie(mobile_number:str,password = None):
+    token1 = signJWT( mobile_number )
+    content = {"message": "Come to the dark , we have cookies"}
     response = JSONResponse(content=content)
-    response.set_cookie(key="Bearer",expires=0,httponly=False)
+    response.set_cookie(key="Bearer",value=token1,expires=60,httponly=True)
     return response
 
+
+# @router.post("/logout/",tags=['LOGOUT'])
+# def drop_cookie():
+    
+#     content = {"message": "Clear cookies",
+#                 "status":200}
+#     response = JSONResponse(content=content)
+#     response.set_cookie(key="Bearer",expires=0,httponly=False,path ='/',samesite=None)
+#     return response
+
+  

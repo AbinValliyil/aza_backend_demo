@@ -45,6 +45,12 @@ async def otp(mobile_num:str,db:session=Depends(get_db)):
 
 @router.post('/OTP_Genarator/resetpassword',tags=['MOBILE_OTP'])
 async def otp(mobile_num:str,db:session=Depends(get_db)):
+    db_user= db.query(models.AZAUser).filter(models.AZAUser.mobile_number ==mobile_num).first()
+
+    if db_user is   None:
+        # raise HTTPException(status_code=400,error_message="mobile number already exists!")
+        #return JSONResponse(status_code=400,content="mobile number already exists!")
+        return{"error_message": "mobile number Ethalladoo !! ni poi singup cheyy ! please --> Singup","status":status.HTTP_400_BAD_REQUEST}
     url ="https://www.fast2sms.com/dev/bulkV2"
     otp = OTPgenerator()
     mobile_number =mobile_num
@@ -68,7 +74,7 @@ async def otp(mobile_num:str,db:session=Depends(get_db)):
     
 
 @router.post('/otp_verification',tags=['MOBILE_OTP'])
-def otp_verification(mobile:str,otp:str,d:int,db:session=Depends(get_db)):
+def otp_verification(mobile:str,otp:str,db:session=Depends(get_db)):
      
     
     valid_otps = db.query(models.AZAOTP.otp).filter(models.AZAOTP.mobile_number==mobile).all()
