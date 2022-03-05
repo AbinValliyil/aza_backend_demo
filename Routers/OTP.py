@@ -48,9 +48,11 @@ async def otp(mobile_num:str,db:session=Depends(get_db)):
     db_user= db.query(models.AZAUser).filter(models.AZAUser.mobile_number ==mobile_num).first()
 
     if db_user is   None:
+        return{"error_message": "Can't find your account try sing-up or check your Mobile number! ","status":status.HTTP_404_NOT_FOUND}
+    
         # raise HTTPException(status_code=400,error_message="mobile number already exists!")
         #return JSONResponse(status_code=400,content="mobile number already exists!")
-        return{"error_message": "mobile number Ethalladoo !! ni poi singup cheyy ! please --> Singup","status":status.HTTP_400_BAD_REQUEST}
+        # return{"error_message": "mobile number Ethalladoo !! ni poi singup cheyy ! please --> Singup","status":status.HTTP_400_BAD_REQUEST}
     url ="https://www.fast2sms.com/dev/bulkV2"
     otp = OTPgenerator()
     mobile_number =mobile_num
