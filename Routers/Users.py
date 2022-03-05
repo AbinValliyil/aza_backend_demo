@@ -118,7 +118,7 @@ async def reset(user:schemas.Resetpass,db:session=Depends(get_db)):
     if not users:
 
     
-     return{"error_message": "There was a problem with your password reset","status":status.HTTP_404_NOT_FOUND}
+     return{"error_message": "Can't find your account try sing-up or check your Mobile number! ","status":status.HTTP_404_NOT_FOUND}
     
     hashed_password = hash(user.password)
     users.password  = hashed_password
