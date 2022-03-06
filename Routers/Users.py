@@ -147,7 +147,7 @@ async def reset(user:schemas.Resetpass,db:session=Depends(get_db)):
     
 
 
-@router.post("/cookie/",tags=['SET-COOKIE'])
+@router.get("/cookie/",tags=['SET-COOKIE'])
 def create_cookie(mobile_number:str,password = None):
     token1 = signJWT( mobile_number )
     content = {"message": "Come to the dark , we have cookies"}

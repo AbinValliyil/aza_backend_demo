@@ -17,16 +17,6 @@ class AZAOTP(Base):
 
 
 
-# class AZAOTPvalidation(Base):
-#     __tablename__='otp_vaidation'
-#     id                = Column(Integer,primary_key=True,autoincrement=True)
-#     mobile_number     = Column(String,nullable=False)
-#     otp               = Column(String,nullable=False)
-#     created_at        = Column(DateTime, default=current_timestamp())
-#     updated_at        = Column(DateTime, onupdate=current_timestamp())
-
-
-
 class AZAUser(Base):
     __tablename__='users'
     id                = Column(Integer,primary_key=True,autoincrement=True)
