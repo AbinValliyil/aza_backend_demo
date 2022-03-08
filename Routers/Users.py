@@ -152,7 +152,7 @@ def create_cookie(mobile_number:str,password = None):
     token1 = signJWT( mobile_number )
     content = {"message": "Come to the dark , we have cookies"}
     response = JSONResponse(content=content)
-    response.set_cookie(key="Bearer",value=token1,expires=60,samesite="none",secure=True,domain='azza.vercel.app')
+    response.set_cookie(key="Bearer",value=token1,expires=60,samesite=None,secure=True,domain='azza.vercel.app')
     return response
 
 
@@ -161,7 +161,7 @@ def create_cookie(mobile_number:str,password = None):
     token1 = signJWT( mobile_number )
     content = {"message": "Come to the dark , we have cookies"}
     response = JSONResponse(content=content)
-    response.set_cookie(key="Bearer",value=token1,expires=60,httponly=True,samesite="none",secure=True,domain='azza.vercel.app')
+    response.set_cookie(key="Bearer",value=token1,expires=60,httponly=True,samesite=None,secure=True,domain='azza.vercel.app')
     return response
 
 # @router.post("/logout/",tags=['LOGOUT'])
