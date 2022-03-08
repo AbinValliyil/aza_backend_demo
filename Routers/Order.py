@@ -11,7 +11,7 @@ db = SessionLocal()
 
 
 
-@router.post('/Create_Order',dependencies=[Depends(JWTBearer())],tags=['USER_ORDER'])
+@router.post('/Create_Order',tags=['USER_ORDER'])
 def create_user_Order( package: schemas.Package_Create,Pickup_address:schemas.Pickup_Address_Create,Delivery_address:schemas.Delivery_Address_Create,Delivery_details:schemas.Delivery_Details_Create, user_id:str,db: session = Depends(get_db)):
     db_Package = models.Package(**package.dict(), owner_id=user_id)
     db.add(db_Package)
