@@ -19,7 +19,7 @@ db = SessionLocal()
 
 @router.post('/create_user',tags=['USER'])
 
-async def create_an_user(user:schemas.AZA_SingUp, Authorize:dependencies=[Depends(JWTBearer())],db:session=Depends(get_db)):
+async def create_an_user(user:schemas.AZA_SingUp, db:session=Depends(get_db)):
       
     db_user= db.query(AZAUser).filter(models.AZAUser.mobile_number ==user.mobile_number).first()
 
@@ -45,7 +45,7 @@ async def create_an_user(user:schemas.AZA_SingUp, Authorize:dependencies=[Depend
     # response = JSONResponse(content=content)
     # response.set_cookie(key="Bearer",value=token,expires=2.592e+6,httponly=True,path ='/',samesite=None)
     # return response
-    Authorize.set_access_cookies(token)
+   
     return {'user_data':{
 
                   
@@ -53,8 +53,8 @@ async def create_an_user(user:schemas.AZA_SingUp, Authorize:dependencies=[Depend
              ** f_id,
              'name'           : user.name,
              'mobile_number'  :user.mobile_number,
-#              'access_token'   :token,
-#              'type':"Bearer"
+             'access_token'   :token,
+             'type':"Bearer"
                         
                         
             },
